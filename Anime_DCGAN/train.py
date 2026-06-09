@@ -1,3 +1,9 @@
+"""Training script for the Anime DCGAN model.
+
+Initializes the generator and discriminator, runs the training loop, and saves generated images at
+checkpoints and upon completion.
+"""
+
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
@@ -23,7 +29,9 @@ beta_2 = 0.999
 batch_size = 64
 #####################
 
+
 def check_gen_images(gen, noise_dim, batch_size, device, epoch):
+    """Generate and save a sample grid of images from the generator for the given epoch."""
     gen_model.eval()
     dis_model.eval()
     with torch.no_grad():
@@ -43,6 +51,7 @@ anime_transform = transforms.Compose([
 
 
 def weights_init(m):
+    """Apply DCGAN-style weight initialization to Conv2d, ConvTranspose2d, and BatchNorm2d layers."""
     if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
         torch.nn.init.normal_(m.weight, 0.0, 0.02)
     if isinstance(m, nn.BatchNorm2d):
