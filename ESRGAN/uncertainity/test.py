@@ -1,3 +1,9 @@
+"""
+Test-time uncertainty estimation for ESRGAN using MC Dropout.
+
+Runs multiple forward passes with dropout enabled to sample SR outputs,
+then computes PSNR and SSIM between two sampled outputs as a consistency check.
+"""
 from model import DRRRDBNet
 import torch
 from data_loader import get_loader
@@ -11,6 +17,7 @@ from torchmetrics import StructuralSimilarityIndexMeasure
 
 
 def load_weights(checkpoint_file, model):
+    """Load pretrained generator weights from a checkpoint file into the model."""
     print("=> Loading weights")
     checkpoint = torch.load(checkpoint_file, map_location=device)
     model_state_dict = model.state_dict()
@@ -23,7 +30,7 @@ def load_weights(checkpoint_file, model):
 
 
 def enable_dropout(model):
-    """ Function to enable the dropout layers during test-time """
+    """Enable dropout layers during inference to support MC Dropout sampling."""
     for m in model.modules():
         if m.__class__.__name__.startswith('Dropout'):
             m.train()
