@@ -1,3 +1,9 @@
+"""
+Interpolate between a PSNR-optimised generator and an ESRGAN generator.
+
+Loads both checkpoints and produces a convex combination of their weights
+controlled by alpha, saving the result to a new checkpoint file.
+"""
 import torch
 from collections import OrderedDict
 
