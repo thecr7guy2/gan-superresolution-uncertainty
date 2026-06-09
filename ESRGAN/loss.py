@@ -1,3 +1,5 @@
+"""Loss functions used in ESRGAN training, including perceptual (VGG-based) loss."""
+
 import torch.nn as nn
 from torchvision import models,transforms
 import torch
@@ -8,7 +10,10 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class PerceptualLoss(nn.Module):
+    """Perceptual loss using VGG19 features extracted at layer features.34."""
+
     def __init__(self):
+        """Initialize VGG19 feature extractor with ImageNet normalization and frozen weights."""
         super(PerceptualLoss, self).__init__()
         vgg = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1)
         # self.vgg = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1).features[:35].eval().to(device)
@@ -20,6 +25,7 @@ class PerceptualLoss(nn.Module):
         self.loss = nn.MSELoss()
 
     def forward(self, gen_im, original_im):
+        """Compute MSE loss between VGG19 features of generated and original images."""
         gen_im = self.normalization(gen_im)
         original_im = self.normalization(original_im)
         gen_features = self.feature_extractor(gen_im)["features.34"]
