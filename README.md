@@ -1,21 +1,91 @@
-# Estimating Uncertainty in Generative Adversarial Neural Networks for Super-Resolution
+# Uncertainty Estimation in GANs for Super-Resolution
 
-## Description
-This repository contains the implementation and supplementary materials for the Master's Thesis titled "Estimating Uncertainty in Generative Adversarial Neural Networks for Super-Resolution" by Maniraj Sai Adapa, submitted to the University of Groningen.
+> **Master's Thesis** — Maniraj Sai Adapa | University of Groningen
 
-## Brief Summary
-This thesis explores the integration of uncertainty estimation techniques with Generative Adversarial Neural Networks (GANs), specifically focusing on Super-Resolution GAN (SRGAN) and Enhanced Super-Resolution GAN (ESRGAN). The primary objective is to enhance the reliability and interpretability of these models by quantifying the uncertainty in their outputs, addressing the limitations posed by noise and artifacts in image super-resolution.
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/Framework-PyTorch-EE4C2C?logo=pytorch&logoColor=white)
+![Deep Learning](https://img.shields.io/badge/Domain-Deep%20Learning-blueviolet)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
-## Purpose
-The purpose of this research is to advance super-resolution capabilities through uncertainty modeling, thereby laying the groundwork for safer and more reliable utilization of AI in various domains, including healthcare, security, and surveillance. By combining industry-standard GANs with uncertainty estimation techniques like Monte Carlo dropout and ensemble methods, the study aims to provide a measure of the reliability of the reconstructed image, allowing for improvements in the reconstruction process and enabling well-informed decision-making in critical applications.
+---
 
-## Main Findings
-1. ### Uncertainty-Aware Super-Resolution:
-   - The integration of uncertainty estimation with super-resolution GANs produces enhanced images with quantified reliability, enabling the pinpointing of regions in the image where confidence is lower.
-   - This approach aids in distinguishing between genuine anomalies and artifacts produced by the model, supporting precise interventions and well-informed decisions in critical domains like medical imaging and aerial imaging.
+## Overview
 
-2. ### Optimal Method for Uncertainty Estimation:
-   - The study compares different uncertainty estimation techniques to determine the optimal method in terms of performance and impact on the stability of the training process and convergence properties of GANs.
+This repository contains the full implementation and supplementary materials for the Master's Thesis:
 
-3. ### Enhanced Interpretability and Reliability:
-   - The incorporation of uncertainty modeling enhances the interpretability and reliability of deep learning algorithms, providing insights into the confidence or certainty associated with each prediction and allowing researchers and professionals to assess the potential risks associated with deploying the algorithms.
+**"Estimating Uncertainty in Generative Adversarial Neural Networks for Super-Resolution"**
+
+The core idea: standard GANs reconstruct high-resolution images but give no signal about *how confident* they are. This work integrates uncertainty estimation directly into SRGAN and ESRGAN, so every super-resolved image comes with a reliability map — telling you *where* the model is guessing.
+
+---
+
+## Motivation
+
+Super-resolution GANs produce visually impressive results, but noise and hallucinated artifacts can be hard to detect. In high-stakes domains like **medical imaging**, **surveillance**, and **aerial imaging**, an overconfident wrong prediction can have real consequences.
+
+This thesis addresses that gap by combining:
+- State-of-the-art GANs (SRGAN, ESRGAN)
+- Uncertainty estimation techniques (Monte Carlo Dropout, Ensemble Methods)
+
+---
+
+## Key Findings
+
+### 1. Uncertainty-Aware Super-Resolution
+Integrating uncertainty estimation produces enhanced images with a **quantified reliability score per pixel** — making it possible to pinpoint regions where the model is less confident and distinguish genuine anomalies from model artifacts.
+
+### 2. Comparison of Uncertainty Methods
+A systematic comparison of **Monte Carlo Dropout** vs **Ensemble Methods** across performance, training stability, and convergence behaviour in GAN training.
+
+### 3. Improved Interpretability
+Uncertainty maps allow researchers and practitioners to assess deployment risk — giving a concrete signal for when to trust (or not trust) a model's output.
+
+---
+
+## Repository Structure
+
+```
+gan-superresolution-uncertainty/
+│
+├── First_gan/          # Baseline GAN experiments
+├── DCGAN/              # Deep Convolutional GAN implementation
+├── Anime_DCGAN/        # DCGAN applied to anime dataset
+├── dog_dcgan/          # DCGAN applied to dog dataset
+├── CGAN/               # Conditional GAN
+├── SRGAN/              # Super-Resolution GAN + uncertainty estimation
+├── ESRGAN/             # Enhanced SRGAN + uncertainty estimation
+├── Infrence/           # Inference scripts and uncertainty visualization
+└── referneces/         # Papers and reference materials
+```
+
+---
+
+## Methods
+
+| Technique | Description |
+|---|---|
+| **SRGAN** | Super-Resolution GAN — baseline super-resolution model |
+| **ESRGAN** | Enhanced SRGAN — improved perceptual quality |
+| **MC Dropout** | Monte Carlo Dropout for approximate Bayesian inference |
+| **Deep Ensembles** | Multiple model instances for uncertainty quantification |
+
+---
+
+## Citation
+
+If you use this work, please cite:
+
+```bibtex
+@mastersthesis{adapa2023uncertainty,
+  author  = {Maniraj Sai Adapa},
+  title   = {Estimating Uncertainty in Generative Adversarial Neural Networks for Super-Resolution},
+  school  = {University of Groningen},
+  year    = {2023}
+}
+```
+
+---
+
+## Author
+
+**Maniraj Sai Adapa** — [GitHub](https://github.com/thecr7guy2)
