@@ -1,3 +1,8 @@
+"""Training script for the RRDBNet generator using pixel-wise L1 loss.
+
+Trains the RRDB-based super-resolution model without adversarial components,
+saving checkpoints when PSNR and SSIM improve on the validation set.
+"""
 import torch
 from torch import nn
 from torch import optim
@@ -14,6 +19,7 @@ os.mkdir(exp_path)
 
 
 def save_checkpoint(model, optimizer, scheduler, epoch, psnr, ssim, filename="my_checkpoint.pth.tar"):
+    """Save model, optimizer, and scheduler states along with metrics to a checkpoint file."""
     print("=> Saving checkpoint")
     checkpoint = {
         'epoch': epoch,
@@ -27,6 +33,7 @@ def save_checkpoint(model, optimizer, scheduler, epoch, psnr, ssim, filename="my
 
 
 def load_checkpoint(checkpoint_file, model, optimizer, scheduler):
+    """Load model, optimizer, and scheduler states from a checkpoint file and return epoch and metrics."""
     print("=> Loading checkpoint")
     checkpoint = torch.load(checkpoint_file, map_location=device)
     curr_epoch = checkpoint["epoch"]
@@ -43,6 +50,7 @@ def load_checkpoint(checkpoint_file, model, optimizer, scheduler):
 
 
 def gen_weights_init(m):
+    """Initialize Conv2d layers with Kaiming normal weights scaled by 0.1 and zero biases."""
     if isinstance(m, nn.Conv2d):
         nn.init.kaiming_normal_(m.weight)
         m.weight.data *= 0.1
@@ -51,6 +59,7 @@ def gen_weights_init(m):
 
 
 def train_one_epoch(gen_model, loader, criterion, optimizer):
+    """Run one training epoch and return the cumulative L1 loss over all batches."""
     running_loss = 0
     loop = tqdm(loader)
     gen_model.train()
@@ -68,6 +77,7 @@ def train_one_epoch(gen_model, loader, criterion, optimizer):
 
 
 def eval_one_epoch(gen_model, loader, psnr_criterion, ssim_criterion):
+    """Evaluate the model on a validation loader and return cumulative PSNR and SSIM."""
     running_psnr = 0
     running_ssim = 0
     loop = tqdm(loader)
