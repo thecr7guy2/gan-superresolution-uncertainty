@@ -1,19 +1,14 @@
+"""DCGAN generator module with transposed convolution blocks for image synthesis."""
 import torch
 import torch.nn as nn
 from torchvision.utils import save_image
 
 
 class generator(nn.Module):
-    """
-    The following module generates an image when given a random noise as an input
-    Parameters:
-        input_dim:
-        hidden_dim:
-        im_dim:
-        noise:
-    """
+    """DCGAN generator that maps a latent noise vector to a synthetic image via transposed convolutions."""
 
     def __init__(self, input_dim, hidden_dim, im_dim):
+        """Build the generator sequential network from noise dimension to image channels."""
         super(generator, self).__init__()
         self.generator = nn.Sequential(
             self.generator_block(input_dim, hidden_dim * 4, kernel_size=3, stride=2, padding=0, last_layer=False),
@@ -24,7 +19,7 @@ class generator(nn.Module):
 
     @staticmethod
     def generator_block(in_channels, out_channels, kernel_size, stride, padding, last_layer=False):
-
+        """Return a transposed convolution block; uses BatchNorm+ReLU for hidden layers and Tanh for the output layer."""
         if last_layer == False:
             block = nn.Sequential(
                 nn.ConvTranspose2d(in_channels, out_channels, kernel_size, stride, padding),
@@ -39,7 +34,7 @@ class generator(nn.Module):
         return block
 
     def forward(self, noise):
-
+        """Reshape flat noise vector to spatial tensor and pass through the generator network."""
         noise = noise.view(noise.shape[0], noise.shape[1], 1, 1)
 
         xd = self.generator(noise)
@@ -66,7 +61,9 @@ class generator(nn.Module):
 
 # print(gen_image.shape)
 
+
 def gen_loss(gen, disc, criterion, real_im, noise_dim, device):
+    """Compute generator adversarial loss by fooling the discriminator with generated fake images."""
     noise_vec = torch.randn(len(real_im), noise_dim, device=device)
 
     fake_images = gen(noise_vec)
