@@ -1,11 +1,13 @@
+"""DCGAN discriminator module for distinguishing real from generated images."""
 import torch
 import torch.nn as nn
 
 
 class discriminator(nn.Module):
-    """Some Information about discriminator"""
+    """Convolutional discriminator network for the DCGAN."""
 
     def __init__(self, im_dim, hidden_dim):
+        """Initialize the discriminator with input and hidden channel dimensions."""
         super(discriminator, self).__init__()
         self.dis = nn.Sequential(
             self.dis_block(im_dim, hidden_dim, 4, 2, final_layer=False),
@@ -15,7 +17,7 @@ class discriminator(nn.Module):
 
     @staticmethod
     def dis_block(input_channels, output_channels, kernel_size, stride, final_layer=False):
-
+        """Build a single discriminator conv block; omits BatchNorm and activation on the final layer."""
         if final_layer == False:
             block = nn.Sequential(
                 nn.Conv2d(input_channels, output_channels, kernel_size, stride),
@@ -30,13 +32,14 @@ class discriminator(nn.Module):
         return block
 
     def forward(self, image):
-
+        """Run the discriminator on a batch of images and return flattened logits."""
         x = self.dis(image)
         x = x.view(len(x), -1)
         return x
 
 
 def dis_loss(gen, disc, criterion, real_im, noise_dim, device):
+    """Compute the discriminator loss as the average of real and fake image losses."""
     noise_vec = torch.randn(len(real_im), noise_dim, device=device)
 
     # pass the noise as an input to the generator to generate fake images
