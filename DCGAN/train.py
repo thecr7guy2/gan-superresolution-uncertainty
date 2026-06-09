@@ -1,3 +1,4 @@
+"""Training script for the DCGAN model on MNIST."""
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
@@ -21,7 +22,9 @@ beta_1 = 0.5
 beta_2 = 0.999
 #####################
 
+
 def check_gen_images(gen, noise_dim, batch_size, device, epoch):
+    """Generate and save a sample grid of images from the generator at a given epoch."""
     gen_model.eval()
     dis_model.eval()
     with torch.no_grad():
@@ -34,6 +37,7 @@ def check_gen_images(gen, noise_dim, batch_size, device, epoch):
 
 
 def weights_init(m):
+    """Apply normal weight initialisation to Conv2d, ConvTranspose2d, and BatchNorm2d layers."""
     if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
         torch.nn.init.normal_(m.weight, 0.0, 0.02)
     if isinstance(m, nn.BatchNorm2d):
