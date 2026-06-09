@@ -1,3 +1,4 @@
+"""Baseline inference script for ESRGAN super-resolution on a randomly selected test image."""
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -11,6 +12,7 @@ from torchvision.transforms import InterpolationMode
 
 
 def load_weights(checkpoint_file, model):
+    """Load pretrained weights from a checkpoint file into the model, skipping mismatched layers."""
     print("=> Loading weights")
     checkpoint = torch.load(checkpoint_file, map_location=device)
     model_state_dict = model.state_dict()
