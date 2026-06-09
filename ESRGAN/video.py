@@ -1,3 +1,8 @@
+"""Video/GIF super-resolution pipeline using the ESRGAN generator.
+
+Extracts frames from a GIF, runs each frame through the trained ESRGAN model,
+and reassembles the super-resolved frames back into a GIF for comparison.
+"""
 from PIL import Image
 from model import RRDBNet
 import torch
@@ -11,6 +16,7 @@ import cv2
 
 
 def extract_frames(gif_path, output_path):
+    """Extract individual frames from an animated GIF and save them as PNG files."""
     gif = Image.open(gif_path)
     # Check if the GIF is animated
     if gif.is_animated:
@@ -30,6 +36,7 @@ def extract_frames(gif_path, output_path):
 
 
 def load_weights(checkpoint_file, model):
+    """Load pretrained weights from a checkpoint file into the model, skipping mismatched layers."""
     print("=> Loading weights")
     checkpoint = torch.load(checkpoint_file, map_location=device)
     model_state_dict = model.state_dict()
@@ -43,12 +50,14 @@ def load_weights(checkpoint_file, model):
 
 # Step 1: Read all the image files from the folder
 def get_image_paths(folder_path):
+    """Return a list of full paths for all image files in the given folder."""
     image_paths = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if
                    file.endswith(('.jpg', '.jpeg', '.png', '.gif'))]
     return image_paths
 
 
 def preprocess_image(image_path):
+    """Load an image, convert to RGB, resize to 64x64, and normalise to a tensor."""
     image = Image.open(image_path)
     if image.mode != 'RGB':
         image = image.convert('RGB')
@@ -63,6 +72,7 @@ def preprocess_image(image_path):
 
 
 def load_model(model_path, device):
+    """Instantiate the RRDBNet generator, load weights from disk, and set it to eval mode."""
     gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
     gen = load_weights(model_path, gen)
     gen.eval()  # Set the model to evaluation mode
@@ -70,6 +80,10 @@ def load_model(model_path, device):
 
 
 def create_gif(frames_folder, output_gif_path, duration=100):
+    """Assemble PNG frames from a folder into an animated GIF.
+
+    duration controls the display time of each frame in milliseconds.
+    """
     # frames_folder: Path to the folder containing individual frames as PNG images
     # output_gif_path: Path to save the output GIF
     # duration: The duration (in milliseconds) of each frame in the final GIF
