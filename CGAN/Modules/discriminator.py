@@ -1,8 +1,12 @@
+"""Discriminator module for the Conditional GAN super-resolution pipeline."""
 import torch.nn as nn
 
 
 class discriminator(nn.Module):
+    """PatchGAN-style discriminator that classifies image patches as real or fake."""
+
     def __init__(self, im_dim, hidden_dim):
+        """Initialize the discriminator with a sequence of convolutional blocks."""
         super(discriminator, self).__init__()
         self.dis = nn.Sequential(
             self.dis_block(im_dim, hidden_dim, 4, 2, final_layer=False),
@@ -12,7 +16,7 @@ class discriminator(nn.Module):
 
     @staticmethod
     def dis_block(input_channels, output_channels, kernel_size, stride, final_layer=False):
-
+        """Build a single discriminator block with optional BatchNorm and LeakyReLU."""
         if final_layer == False:
             block = nn.Sequential(
                 nn.Conv2d(input_channels, output_channels, kernel_size, stride),
@@ -27,6 +31,7 @@ class discriminator(nn.Module):
         return block
 
     def forward(self, image):
+        """Run the discriminator forward pass and return flattened predictions."""
         x = self.dis(image)
         x = x.view(len(x), -1)
         return x
