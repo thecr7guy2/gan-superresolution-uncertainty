@@ -1,3 +1,4 @@
+"""Compute SSIM between a low-resolution original and a super-resolved generated image."""
 from skimage.metrics import structural_similarity as ssim
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,5 +12,5 @@ low_res = np.array(low_res)
 low_res = low_res.astype(np.float32)
 sup_res = np.array(sup_res).astype(np.float32)
 
-ssim_score = ssim(low_res, sup_res, data_range=sup_res.max() - sup_res.min(),channel_axis=2)
+ssim_score = ssim(low_res, sup_res, data_range=sup_res.max() - sup_res.min(), channel_axis=2)
 print(ssim_score)
