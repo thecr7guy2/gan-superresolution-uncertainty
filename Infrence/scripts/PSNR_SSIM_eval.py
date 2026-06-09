@@ -1,7 +1,14 @@
+"""Evaluate PSNR and SSIM between a ground-truth image and a generated image on the Y channel."""
+
 import cv2
 from skimage.metrics import structural_similarity
 
+
 def metrics(x1, x2):
+    """Compute PSNR and SSIM on the Y (luma) channel of two images.
+
+    Converts both images to YCbCr colour space and evaluates metrics on the luma channel only.
+    """
     img1 = cv2.imread(x1)
     img2 = cv2.imread(x2)
 
@@ -25,4 +32,3 @@ def metrics(x1, x2):
 a,b = metrics("../Images/Datasets/Set14/GTmod12/ppt3.png", "../Images/Results/gen_img.png")
 
 print(a,b)
-
