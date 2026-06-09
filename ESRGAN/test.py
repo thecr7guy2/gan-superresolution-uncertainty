@@ -1,3 +1,8 @@
+"""Inference script for ESRGAN super-resolution models.
+
+Loads a pretrained generator, picks a random test image, runs super-resolution,
+and saves the output alongside the low-resolution input.
+"""
 from model import RRDBNet
 from model3 import RRDBNet2
 from uncertainity.model import DRRRDBNet
@@ -12,6 +17,7 @@ import random
 
 
 def load_weights(checkpoint_file, model):
+    """Load model weights from a checkpoint saved with a state_dict key."""
     print("=> Loading weights")
     checkpoint = torch.load(checkpoint_file, map_location=device)
     model_state_dict = model.state_dict()
@@ -22,7 +28,9 @@ def load_weights(checkpoint_file, model):
     print("Successfully loaded the pretrained model weights")
     return model
 
+
 def load_weights2(checkpoint_file, model):
+    """Load model weights from a flat checkpoint (no state_dict key wrapper)."""
     print("=> Loading weights")
     checkpoint = torch.load(checkpoint_file, map_location=device)
     model_state_dict = model.state_dict()
