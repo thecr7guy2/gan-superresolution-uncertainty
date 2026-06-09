@@ -1,9 +1,13 @@
+"""Generator network for the Conditional GAN used in super-resolution."""
 import torch
 import torch.nn as nn
 
 
 class generator(nn.Module):
+    """Transposed-convolution generator that upsamples a latent noise vector to an image."""
+
     def __init__(self, input_dim, hidden_dim, im_dim):
+        """Build the sequential generator from noise dimension to image dimension."""
         super(generator, self).__init__()
         self.generator = nn.Sequential(
             self.generator_block(input_dim, hidden_dim * 4, kernel_size=3, stride=2, padding=0, last_layer=False),
@@ -14,7 +18,7 @@ class generator(nn.Module):
 
     @staticmethod
     def generator_block(in_channels, out_channels, kernel_size, stride, padding, last_layer=False):
-
+        """Return a single transposed-conv block; uses BatchNorm+ReLU unless it is the last layer (Tanh)."""
         if last_layer == False:
             block = nn.Sequential(
                 nn.ConvTranspose2d(in_channels, out_channels, kernel_size, stride, padding),
@@ -29,7 +33,7 @@ class generator(nn.Module):
         return block
 
     def forward(self, noise):
+        """Reshape noise to a spatial tensor and pass it through the generator."""
         noise = noise.view(noise.shape[0], noise.shape[1], 1, 1)
         gen_image = self.generator(noise)
         return gen_image
-
