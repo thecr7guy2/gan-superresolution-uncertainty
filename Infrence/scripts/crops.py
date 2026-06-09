@@ -1,8 +1,10 @@
+"""Utility script to extract and save fixed random crops from a pair of images for visual comparison."""
 from PIL import Image, ImageDraw
 import random
 
 
 def canh(path1, path2, cropsize):
+    """Extract two fixed random crops from a pair of images and save them alongside an annotated original."""
     img1 = Image.open(path1)
     img2 = Image.open(path2)
     seed_x = 32
@@ -32,7 +34,7 @@ def canh(path1, path2, cropsize):
     crop1_y.save('../Images/Results/or_crop2.png')
     crop2_y.save('../Images/Results/sr_crop2.png')
     img1.save('../Images/Results/or_high.jpg')
-    
-    
+
+
 size = 64
 canh("../Images/Datasets/Set14/GTmod12/ppt3.png", "../Images/Results/gen_img.png", size)
