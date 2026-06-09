@@ -1,3 +1,5 @@
+"""Dataloader utilities for the DCGAN experiment using the MNIST dataset."""
+
 import torch
 from torchvision import datasets
 from torch.utils.data import DataLoader
@@ -8,6 +10,7 @@ import matplotlib.pyplot as plt
 
 
 def getdata():
+    """Load and return MNIST train and test DataLoaders with normalization."""
     trans = transforms.Compose([transforms.Resize((28, 28)), transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))
                                 ])
 
