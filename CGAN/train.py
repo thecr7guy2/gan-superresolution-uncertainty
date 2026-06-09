@@ -1,3 +1,5 @@
+"""Training script for the Conditional GAN (CGAN) on the MNIST dataset."""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -21,6 +23,7 @@ beta_2 = 0.999
 
 
 def check_gen_images(gen, noise_dim, batch_size, device, epoch):
+    """Save a batch of generated images for digit class 4 to disk at the given epoch."""
     gen_model.eval()
     dis_model.eval()
     with torch.no_grad():
@@ -38,6 +41,7 @@ def check_gen_images(gen, noise_dim, batch_size, device, epoch):
 
 
 def weights_init(m):
+    """Apply normal weight initialisation to Conv2d, ConvTranspose2d, and BatchNorm2d layers."""
     if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
         torch.nn.init.normal_(m.weight, 0.0, 0.02)
     if isinstance(m, nn.BatchNorm2d):
@@ -45,8 +49,8 @@ def weights_init(m):
         torch.nn.init.constant_(m.bias, 0)
 
 
-# creating a method to onehot encode the labels
 def one_hot(labels, n_classes):
+    """Return one-hot encoded tensor for the given integer labels."""
     return F.one_hot(labels, n_classes)
 
 
@@ -58,8 +62,8 @@ def one_hot(labels, n_classes):
 # print(test)
 ####################
 
-# Create a method to combine the noise vectors and the one hot vector
 def concat_vec(vec1, vec2):
+    """Concatenate two vectors along the last dimension, casting both to float."""
     return torch.cat((vec1.float(), vec2.float()), 1)
 
 
@@ -82,6 +86,7 @@ train_loader, test_loader = getdata()
 # components. So we create a function to make changes to the input parameters of the components.
 
 def change_input_params(noise_dim, image_dim, n_classes):
+    """Expand noise and image dimensions to account for appended one-hot class labels."""
     updated_noise_dim = noise_dim + n_classes
     updated_image_dim = image_dim + n_classes
     return updated_noise_dim, updated_image_dim
@@ -173,5 +178,3 @@ for epoch in range(num_epochs):
 
     print('The loss of the generator is {} and the loss of the discriminator is {} for epoch no. {}'.format(
         epoch_gen_loss, epoch_dis_loss, epoch))
-
-
